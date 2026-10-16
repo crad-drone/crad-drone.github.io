@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="CRAD, Crack, 균열 보수 드론, 외벽 균열 탐지, AI 드론, 외벽 보수, 방수공사, 중대재해처벌법, 국립공주대학교">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CRAD | 외벽 균열을 스스로 탐지하고 보수하는 AI 드론">
+<meta property="og:description" content="팀 Crack의 CRAD(Crack Repair AI Drone): AI로 외벽 균열을 탐지하고 벽면에 흡착해 보수까지 수행하는 자율 드론">
+<meta property="og:image" content="https://crad-drone.github.io/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://crad-drone.github.io/">
+<meta property="og:site_name" content="CRAD by Crack">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://crad-drone.github.io/">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23F7D83E'/%3E%3Cpath d='M4 17 L10 14 L14 19 L19 12 L23 17 L28 14' fill='none' stroke='%23111' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Crack","alternateName":"팀 Crack","url":"https://crad-drone.github.io/","logo":"https://crad-drone.github.io/img/og.jpg","description":"외벽 균열을 스스로 탐지하고 보수하는 AI 드론 CRAD(Crack Repair AI Drone)를 개발하는 팀","email":"wonjun302@naver.com"}</script>
+<title>CRAD | 외벽 균열 탐지·보수 AI 드론 – 팀 Crack</title>
+<meta name="description" content="외벽 균열을 스스로 탐지하고 보수하는 AI 드론, CRAD (Crack Repair AI Drone) | 팀 Crack">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}
+/* Layout: the IR deck as a scrolling page — every section opens with the deck's yellow header band, white ground, light-weight titles, gold hairlines, yellow-ringed circles. Single light look by design (matches the deck). */
+:root{
+  color-scheme:light;
+  --bg:#FFFFFF; --ink:#111111; --grey:#7D7D7D; --grey-2:#A6A6A6; --line:#E6D27A;
+  --yellow:#F7D83E; --band:#FFE564; --pale:#FEEE9F; --paler:#FFF7D1; --gold:#D9AE00;
+  --f-sans:"Noto Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --s-hero:clamp(3.2rem,9vw,6.6rem); --s-h2:clamp(1.6rem,3.4vw,2.4rem); --s-h3:1.12rem;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-weight:400;font-size:1rem;line-height:1.7;word-break:keep-all;overflow-wrap:break-word}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--band)}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1180px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.num{font-variant-numeric:tabular-nums}
+
+/* deck header band */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--band)}
+.nav .wrap{display:flex;align-items:center;gap:18px;height:52px}
+.logo{font-weight:500;text-decoration:none;flex:none;font-size:1.05rem;letter-spacing:.01em}
+.links{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;justify-content:center}
+.links::-webkit-scrollbar{display:none}
+.links a{text-decoration:none;font-size:.86rem;padding:6px 10px;border-radius:99px;white-space:nowrap}
+.links a:hover{background:rgb(255 255 255 / .55)}
+.nav .cta{flex:none;font-size:.86rem;font-weight:500;text-decoration:none;background:var(--ink);color:var(--band);padding:6px 14px;border-radius:99px}
+@media (max-width:720px){.nav .cta{display:none}.links{justify-content:flex-start}}
+
+section{padding-block:0 clamp(64px,9vw,104px)}
+.band{background:var(--band);height:34px;margin-bottom:clamp(36px,6vw,64px)}
+.band .wrap{display:flex;align-items:center;justify-content:center;height:100%;position:relative;font-size:.8rem}
+.band .wrap::before{content:"Crack";position:absolute;left:max(16px,env(safe-area-inset-left,0px));color:#E9C200;font-size:.78rem}
+.band b{font-weight:500;margin-right:8px}
+.title{font-size:var(--s-h2);font-weight:400;line-height:1.35;letter-spacing:-.01em}
+.lede{color:var(--grey);max-width:60ch;margin-top:14px;font-weight:300}
+.head{margin-bottom:clamp(32px,5vw,52px)}
+.label{color:var(--gold);font-size:.85rem}
+.desc{color:var(--grey);font-weight:300}
+.hl{background:var(--yellow);padding:0 4px}
+
+/* hero = title slide */
+.hero{background:var(--yellow);padding-block:clamp(56px,9vw,104px) clamp(32px,5vw,48px)}
+.hero h1{font-weight:400;font-size:var(--s-hero);line-height:1.05;letter-spacing:-.02em}
+.hero h1 span{display:block;font-size:.62em;margin-top:.12em;letter-spacing:-.01em}
+.hero .sub{margin-top:clamp(28px,4vw,44px);font-size:clamp(1.15rem,2.4vw,1.7rem);color:#5E5420;font-weight:300}
+.hero .foot{margin-top:clamp(48px,8vw,96px);display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.hero .foot .team{font-size:1.4rem}
+.hero .btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;font:inherit;font-size:.95rem;font-weight:500;text-decoration:none;padding:10px 20px;border-radius:99px;background:var(--ink);color:var(--yellow);border:0;cursor:pointer}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+
+.stats{border-bottom:1px solid var(--line)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:26px 20px;border-left:1px solid var(--line);min-width:0}
+.stat:first-child{border-left:0;padding-left:0}
+.stat .v{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:500;line-height:1.2}
+.stat .v small{font-size:.5em;margin-left:3px;color:var(--grey);font-weight:400}
+.stat .k{font-size:.84rem;color:var(--grey);margin-top:2px}
+@media (max-width:760px){.stats .wrap{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-left:0;padding-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* problem */
+.prob{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,64px);align-items:start}
+.donut{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.donut svg{width:clamp(130px,18vw,170px);height:auto}
+.law{margin-top:36px}
+.law p:first-child{font-size:1.15rem;font-weight:700}
+.law p.big{font-size:clamp(1.15rem,2.2vw,1.45rem);font-weight:700;line-height:1.8;margin-top:6px}
+.src{font-size:.78rem;color:var(--grey-2);margin-top:16px;line-height:1.6;font-weight:300}
+.needs{border-top:1px solid var(--line)}
+.need{display:grid;grid-template-columns:84px 1fr;gap:16px;padding-block:22px;border-bottom:1px solid var(--line)}
+.need .id{color:var(--grey);font-size:1.02rem}
+.need h3{font-size:1.08rem;font-weight:700}
+.need p{margin-top:4px}
+@media (max-width:860px){.prob{grid-template-columns:1fr}}
+
+/* CRAD intro (slide 5) */
+.intro{display:grid;grid-template-columns:320px 1fr;gap:clamp(20px,4vw,48px);align-items:center}
+.feat{border-bottom:1px solid var(--line);padding-block:18px}
+.feat:first-child{padding-top:0}
+.feat h3{font-weight:700;font-size:1.12rem;margin-top:2px}
+.feat p{margin-top:6px;font-size:.95rem}
+.render{position:relative;background:#E9E8E6;aspect-ratio:16/10;overflow:hidden}
+.render img{width:100%;height:100%;object-fit:cover;object-position:30% 50%}
+.render .tip{position:absolute;color:var(--gold);font-size:.82rem;font-weight:500;background:rgb(255 255 255 / .82);padding:1px 8px;border-radius:99px}
+@media (max-width:860px){.intro{grid-template-columns:1fr}}
+
+/* tether (slide 6) */
+.tether{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(20px,4vw,56px);align-items:center;margin-top:clamp(48px,7vw,80px)}
+.tether .im{background:#E9E8E6;aspect-ratio:16/10;overflow:hidden}
+.tether .im img{width:100%;height:100%;object-fit:cover;object-position:62% 50%}
+.bul{list-style:none;padding:0;margin:0;display:grid;gap:16px;font-size:1.08rem}
+.bul li{display:grid;grid-template-columns:14px 1fr;gap:12px}
+.bul li::before{content:"";width:7px;height:7px;background:var(--ink);margin-top:.72em}
+@media (max-width:860px){.tether{grid-template-columns:1fr}}
+
+/* process (slides 7–8) */
+.proc{display:grid;gap:clamp(48px,7vw,72px)}
+.proc h3{font-size:1.4rem;font-weight:400;margin-bottom:28px}
+.circles{display:flex;align-items:flex-start;justify-content:center;gap:0;flex-wrap:wrap;row-gap:20px}
+.node{display:grid;justify-items:center;gap:12px;width:clamp(96px,15vw,150px)}
+.node .c{width:100%;aspect-ratio:1;border-radius:50%;border:5px solid var(--yellow);overflow:hidden;background:var(--paler);display:grid;place-items:center;font-size:clamp(1.4rem,3vw,2rem);font-weight:300;color:var(--gold)}
+.node .c img{width:100%;height:100%;object-fit:cover}
+.node span{font-weight:700;font-size:.95rem;text-align:center}
+.arrow{width:clamp(18px,3vw,40px);height:clamp(96px,15vw,150px);display:grid;place-items:center;flex:none}
+.arrow::before{content:"";border-left:14px solid var(--yellow);border-top:9px solid transparent;border-bottom:9px solid transparent}
+.loopline{max-width:calc(5 * clamp(96px,15vw,150px) + 4 * clamp(18px,3vw,40px) - clamp(96px,15vw,150px));margin:18px auto 0;height:28px;border:5px solid var(--yellow);border-top:0;position:relative}
+.loopline::before{content:"";position:absolute;left:-14px;top:-16px;border-bottom:14px solid var(--yellow);border-left:9px solid transparent;border-right:9px solid transparent}
+.loopcap{text-align:center;font-weight:700;margin-top:10px;font-size:.95rem}
+@media (max-width:640px){.loopline{display:none}}
+
+/* spec table */
+.spec{margin-top:clamp(48px,7vw,80px);overflow-x:auto}
+.spec table{width:100%;border-collapse:collapse;min-width:560px}
+.spec th,.spec td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);font-size:.94rem;vertical-align:top}
+.spec thead th{border-top:2px solid var(--yellow);font-weight:500;color:var(--grey);font-size:.82rem}
+.spec td:first-child{font-weight:700}
+.spec td:nth-child(2){white-space:nowrap;font-weight:500;font-variant-numeric:tabular-nums}
+.spec td:nth-child(3){color:var(--grey);font-weight:300}
+
+/* AI */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.two > div{padding:26px clamp(16px,3vw,32px);min-width:0}
+.two > div + div{border-left:1px solid var(--line)}
+.two > div:first-child{padding-left:0}
+.two h3{font-weight:700;font-size:1.15rem;margin-top:4px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:14px 0 0;font-size:.94rem}
+.kv dt{color:var(--grey);font-weight:300}
+.kv dd{margin:0;font-weight:500}
+@media (max-width:760px){.two{grid-template-columns:1fr}.two > div{padding-left:0}.two > div + div{border-left:0;border-top:1px solid var(--line)}}
+.timing{display:grid;gap:12px;margin-top:36px}
+.timing .row{display:grid;grid-template-columns:96px 1fr 72px;gap:12px;align-items:center;font-size:.88rem}
+.timing .track{height:14px;background:var(--paler);border-radius:99px;overflow:hidden}
+.timing .fill{height:100%;background:var(--pale);border-radius:99px}
+.timing .fill.y{background:var(--yellow)}
+.timing .row span:last-child{text-align:right;font-weight:500;font-variant-numeric:tabular-nums}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);margin-top:40px}
+.metrics > div{padding:4px 18px;border-left:1px solid var(--line);min-width:0}
+.metrics > div:first-child{border-left:0;padding-left:0}
+.metrics .v{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:500;font-variant-numeric:tabular-nums}
+.metrics .k{font-size:.84rem;color:var(--grey)}
+@media (max-width:760px){.metrics{grid-template-columns:1fr 1fr;row-gap:24px}.metrics > div:nth-child(3){border-left:0;padding-left:0}}
+.dataset{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:48px}
+.dataset img{width:100%;height:auto}
+.dcap{text-align:center;margin-top:18px}
+.dcap b{font-size:1.15rem}
+.dcap p{font-size:.9rem;font-weight:500}
+.pipe{margin-top:40px;max-width:900px;margin-inline:auto}
+.pipe figcaption{text-align:center;color:var(--grey);font-size:.85rem;margin-top:10px;font-weight:300}
+
+/* energy */
+.energy{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,64px)}
+.energy h3{font-weight:700;font-size:1.1rem;margin-bottom:14px}
+.hb{display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center;font-size:.9rem;margin-top:10px}
+.hb .track{height:34px;background:var(--paler);border-radius:99px}
+.hb .fill{height:100%;background:var(--pale);border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:14px;font-weight:500;font-variant-numeric:tabular-nums}
+.hb .fill.y{background:var(--yellow)}
+.energy .desc{font-size:.86rem;margin-top:12px}
+@media (max-width:860px){.energy{grid-template-columns:1fr}}
+
+/* prototype (slide 9) */
+.proto{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.proto figure{margin:0;min-width:0}
+.proto .im{aspect-ratio:3/4;overflow:hidden;background:#2a2a2a}
+.proto img{width:100%;height:100%;object-fit:cover}
+.proto figcaption{margin-top:10px;font-weight:700;font-size:.95rem}
+.proto figcaption p{font-weight:300;color:var(--grey);font-size:.85rem}
+.status{margin-top:32px;display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-size:.84rem;padding:6px 14px;border-radius:99px;background:var(--paler)}
+.chip.on{background:var(--yellow);font-weight:500}
+@media (max-width:860px){.proto{grid-template-columns:1fr 1fr}}
+
+/* market (slides 12–13) */
+.mkt{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.tiers{border-top:1px solid var(--line)}
+.tier{display:grid;grid-template-columns:72px 1fr;gap:14px;padding-block:20px;border-bottom:1px solid var(--line);align-items:center}
+.tier b{font-weight:400;font-size:1.45rem;text-align:center}
+.tier h3{font-size:1rem;font-weight:700}
+.tier p{font-weight:500;font-size:.98rem}
+.tier .desc{font-weight:300;font-size:.88rem}
+.rings svg{width:100%;max-width:440px;height:auto;display:block;margin-inline:auto}
+.rings text{font-family:var(--f-sans)}
+.growth{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,64px);margin-top:clamp(56px,8vw,96px);align-items:end}
+.growth figure{margin:0;display:grid;justify-items:center;gap:18px;text-align:center}
+.growth svg{width:clamp(180px,26vw,240px);height:auto}
+.growth figcaption b{font-weight:700}
+.growth figcaption p{font-size:.92rem;font-weight:500;margin-top:2px}
+@media (max-width:860px){.mkt,.growth{grid-template-columns:1fr}}
+
+/* BM (slide 14) */
+.bm{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.bm > div{padding:40px clamp(16px,3vw,32px) 48px;min-width:0}
+.bm > div + div{border-left:1px solid var(--line)}
+.bm h3{font-weight:400;font-size:1.35rem;margin-top:4px;line-height:1.45}
+.bm .desc{font-size:1.02rem;margin-top:18px}
+@media (max-width:860px){.bm{grid-template-columns:1fr}.bm > div{padding-left:0}.bm > div + div{border-left:0;border-top:1px solid var(--line)}}
+
+/* competition (slide 15) */
+.comp{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.adv{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.adv li{display:grid;grid-template-columns:64px 1fr;gap:12px;padding-block:18px;border-bottom:1px solid var(--line);font-size:.98rem}
+.adv li span{font-size:.88rem}
+.adv li span i{font-style:normal;color:var(--gold);margin-left:6px}
+.pos svg{width:100%;max-width:470px;height:auto;display:block;margin-inline:auto}
+.pos text{font-family:var(--f-sans)}
+@media (max-width:860px){.comp{grid-template-columns:1fr}.comp .pos{order:-1}}
+
+/* team (slide 16) */
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,4vw,48px)}
+.member{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;min-width:0}
+.member .ph{width:clamp(96px,11vw,128px);aspect-ratio:1;border-radius:50%;overflow:hidden;border:6px solid var(--yellow)}
+.member .ph img{width:100%;height:100%;object-fit:cover}
+.member .role{color:var(--gold);font-size:.8rem}
+.member h3{font-weight:400;font-size:1.35rem;line-height:1.3}
+.member .school{color:var(--grey-2);font-size:.8rem;font-weight:300}
+.member ul{list-style:none;margin:8px 0 0;padding:0;font-size:.8rem;color:var(--grey);font-weight:300;line-height:1.65}
+.advisor{margin-top:40px;font-size:.9rem;color:var(--grey)}
+@media (max-width:960px){.team{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.team{grid-template-columns:1fr}}
+
+/* vision (slide 17) */
+.vision h2{font-weight:800;font-size:clamp(1.9rem,5vw,3.4rem);line-height:1.35;letter-spacing:-.02em}
+.vision h2 span{display:inline-block;border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:22px}
+.contact{margin-top:clamp(40px,6vw,64px);background:var(--yellow);padding:clamp(24px,4vw,36px);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end}
+.contact .k{font-size:.9rem;color:#5E5420}
+.contact .mail{font-size:clamp(1.15rem,2.6vw,1.6rem);font-weight:500;user-select:all;word-break:break-all}
+@media (max-width:640px){.contact{grid-template-columns:1fr}}
+footer{background:var(--band);padding-block:18px;font-size:.8rem}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">Crack</a>
+    <nav class="links" aria-label="섹션">
+      <a href="#problem">필요성</a>
+      <a href="#solution">해결책</a>
+      <a href="#ai">AI 탐지</a>
+      <a href="#market">시장</a>
+      <a href="#bm">수익모델</a>
+      <a href="#compete">경쟁</a>
+      <a href="#team">팀</a>
+    </nav>
+    <a class="cta" href="#contact">문의하기</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <h1>CRAD<span>Crack Repair AI Drone</span></h1>
+      <p class="sub">외벽균열을 스스로 탐지하고 보수하는 AI 드론</p>
+      <div class="foot">
+        <span class="team">Crack</span>
+        <div class="btns"><a class="btn" href="#solution">CRAD 소개 보기</a><a class="btn line" href="#contact">도입 문의</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="wrap">
+      <div class="stat"><div class="v">0<small>명</small></div><div class="k">외벽 고소작업 투입 인력</div></div>
+      <div class="stat"><div class="v num">0.3<small>mm</small></div><div class="k">전수 검사로 식별하는 균열 폭</div></div>
+      <div class="stat"><div class="v num">−52<small>%</small></div><div class="k">보수 중 소비전력 (191.5 → 91 W)</div></div>
+      <div class="stat"><div class="v num">29→39<small>분</small></div><div class="k">배터리 1개당 작업시간</div></div>
+    </div>
+  </div>
+
+  <section id="problem" style="margin-top:clamp(56px,8vw,88px)">
+    <div class="band"><div class="wrap"><b>Problem / Needs</b>필요성</div></div>
+    <div class="wrap">
+      <div class="head"><h2 class="title">외벽 보수는 지금도 사람이 로프에 매달려 합니다</h2></div>
+      <div class="prob">
+        <div>
+          <div class="donut">
+            <svg viewBox="0 0 120 120" role="img" aria-label="사고사망자 중 추락 32.1%">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--pale)" stroke-width="18"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--yellow)" stroke-width="18" stroke-linecap="round" pathLength="100" stroke-dasharray="32.1 100" transform="rotate(-90 60 60)"/>
+              <text x="60" y="62" text-anchor="middle" font-size="21" font-weight="700" fill="var(--ink)">32.1%</text>
+              <text x="60" y="80" text-anchor="middle" font-size="8.5" fill="var(--grey)">추락 사망 비율</text>
+            </svg>
+            <div>
+              <p style="font-weight:700;font-size:1.1rem">재해유형 1위, 떨어짐</p>
+              <p class="desc" style="margin-top:6px">2025년 사고사망자 872명 중 280명이 추락으로 숨졌습니다. 업종별로는 건설업이 41.4%로 가장 높았습니다.</p>
+            </div>
+          </div>
+          <div class="law">
+            <p>사망 등 중대재해가 발생 시</p>
+            <p class="big"><span class="hl">경영책임자를</span> <span class="hl">1년 이상 징역 또는</span> <span class="hl">10억원 이하 벌금</span>에 처함</p>
+            <p class="src">중대재해처벌법은 2024년 1월 27일부터 상시근로자 5인 이상 사업장으로 확대 적용되었습니다. 2024년 9월에는 한 달 사이 건설현장 추락사고 7건으로 7명이 숨졌고, 주로 외벽 보수공사에서 발생했습니다(대한경제, 2024.09.12).</p>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:1.3rem;margin-bottom:18px">5인 이상 규모 방수공사업 사업주의 니즈</p>
+          <div class="needs">
+            <div class="need"><span class="id">Needs 1</span><div><h3>중대재해처벌법에 대한 리스크 해소</h3><p class="desc">외벽 작업 중 인명 사고가 발생했을 때 법적 리스크를 피해갈 수 없기 때문에 상당한 부담이 있습니다.</p></div></div>
+            <div class="need"><span class="id">Needs 2</span><div><h3>안전보건관리체계 구축에 대한 어려움 해결</h3><p class="desc">여러 현장에 걸쳐 일용직 근로자가 빈번히 출입하고 하도급 구조가 복잡해 체계를 구축·이행하기 어렵습니다.</p></div></div>
+            <div class="need"><span class="id">Needs 3</span><div><h3>인건비 절감 및 순이익 증가</h3><p class="desc">외벽 작업 노동자의 인건비를 절감해 순이익을 높이고자 합니다.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="solution">
+    <div class="band"><div class="wrap"><b>Solution</b>Crack의 해결책</div></div>
+    <div class="wrap">
+      <div class="head"><h2 class="title">CRAD 소개</h2></div>
+      <div class="intro">
+        <div>
+          <div class="feat"><span class="label">핵심 기능 1</span><h3>작업자 완전 대체</h3><p class="desc">전 작업이 자동화로 이루어져 작업자를 완전 대체하고 인명사고 리스크를 제거합니다. 육안검사보다 탐지율이 높아 신뢰성 있는 보수공사가 가능합니다.</p></div>
+          <div class="feat"><span class="label">핵심 기능 2</span><h3>드론의 한계 극복</h3><p class="desc">배터리 때문에 드론은 비행시간이 한정됩니다. CRAD는 보수작업 시 벽면에 흡착한 뒤 프로펠러를 정지해 작업시간을 늘립니다.</p></div>
+        </div>
+        <div class="render">
+          <img src="img/hero.webp" alt="외벽에 흡착패드로 붙은 CRAD 드론이 로봇암으로 균열을 보수하는 3D 렌더링" width="1600" height="722">
+          <span class="tip" style="top:8%;right:22%">흡착패드</span>
+          <span class="tip" style="top:52%;left:18%">진공발생기</span>
+          <span class="tip" style="bottom:8%;right:30%">로봇암</span>
+        </div>
+      </div>
+
+      <div class="tether">
+        <div class="im"><img src="img/tether.webp" alt="외벽에 붙은 드론과 지상의 이동식 에어컴프레서를 잇는 테더 호스 렌더링"></div>
+        <div>
+          <ul class="bul">
+            <li><span>테더 호스를 통해 드론으로 압축공기 송출</span></li>
+            <li><span>압축공기는 드론의 진공발생기에서 진공압력 발생</span></li>
+            <li><span>진공압력으로 드론 흡착력 발생</span></li>
+          </ul>
+          <p class="desc" style="margin-top:22px;font-size:.92rem">진공 펌프를 기체에 싣지 않고 지상 컴프레서와 테더로 연결합니다. 이젝터는 압축공기만으로 진공을 만들어 추가 전원이 필요 없어서, 기체 중량과 전력 예산을 함께 줄입니다.</p>
+        </div>
+      </div>
+
+      <div class="proc" style="margin-top:clamp(64px,9vw,104px)">
+        <div>
+          <h3>작업자의 외벽보수 과정</h3>
+          <div class="circles">
+            <div class="node"><div class="c">1</div><span>로프 설치</span></div><div class="arrow"></div>
+            <div class="node"><div class="c">2</div><span>육안 검사</span></div><div class="arrow"></div>
+            <div class="node"><div class="c">3</div><span>균열 보수</span></div><div class="arrow"></div>
+            <div class="node"><div class="c">4</div><span>로프 해체</span></div><div class="arrow"></div>
+            <div class="node"><div class="c">5</div><span>장소 이동</span></div>
+          </div>
+          <div class="loopline" aria-hidden="true"></div>
+          <p class="loopcap">작업 종료까지 반복</p>
+        </div>
+        <div>
+          <h3>CRAD의 외벽보수 과정</h3>
+          <div class="circles">
+            <div class="node"><div class="c"><img src="img/compressor.webp" alt=""></div><span>이동식 에어컴프레서 설치</span></div><div class="arrow"></div>
+            <div class="node"><div class="c"><img src="img/inspect.webp" alt="" style="object-position:48% 40%"></div><span>자율 검사</span></div><div class="arrow"></div>
+            <div class="node"><div class="c"><img src="img/repair.webp" alt="" style="object-position:58% 50%"></div><span>균열 보수</span></div>
+          </div>
+          <p class="loopcap desc" style="font-weight:300">로프 재설치 없이 벽면을 따라 이동하며 탐지와 보수를 한 번에 수행합니다.</p>
+        </div>
+      </div>
+
+      <div class="spec">
+        <table>
+          <thead><tr><th>설계 항목</th><th>값</th><th>근거</th></tr></thead>
+          <tbody>
+            <tr><td>목표 흡착력</td><td>261.3 N</td><td>자유물체도 기반 외력 분석, 안전율 4 적용</td></tr>
+            <tr><td>목표 진공도</td><td>85.9 kPa</td><td>목표 흡착력을 만족하는 진공도</td></tr>
+            <tr><td>흡착패드 구성</td><td>8개 (4 + 4)</td><td>독립 유로 2개, 유로별 진공발생기. 한쪽 누설 시 패드 4개로 하중 지지</td></tr>
+            <tr><td>연결 구조물 안전계수</td><td>≥ 3</td><td>정적 구조해석. 카본 등 비등방성 재료의 피로 물성 불확실성을 반영해 상향</td></tr>
+            <tr><td>온보드 컴퓨터 · 카메라</td><td>Jetson Orin Nano Super · IMX477</td><td>4032 × 3040 px 원본 이미지</td></tr>
+            <tr><td>로봇암 구동</td><td>NEMA 17 × 3</td><td>흡착 상태에서 스텝모터만 구동</td></tr>
+            <tr><td>배터리</td><td>6S 5,200 mAh</td><td>단일 팩 기준 작업시간 산정</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="ai">
+    <div class="band"><div class="wrap"><b>Solution</b>AI 균열 탐지</div></div>
+    <div class="wrap">
+      <div class="head">
+        <h2 class="title">넓게 빠르게 찾고, 붙어서 정밀하게 따라갑니다</h2>
+        <p class="lede">픽셀 단위 Segmentation은 정확하지만 연산량이 커서 벽면 전체에 적용하기 어렵습니다. 그래서 탐지와 보수 경로 추출을 두 단계로 나눴습니다.</p>
+      </div>
+      <div class="two">
+        <div>
+          <span class="label">1단계 · 호버링 중</span>
+          <h3>균열 유무 판정</h3>
+          <dl class="kv"><dt>모델</dt><dd>YOLO11n Detection</dd><dt>입력</dt><dd>640×640 비중첩 타일 35장</dd><dt>추론</dt><dd class="num">0.456 s (배치)</dd></dl>
+        </div>
+        <div>
+          <span class="label">2단계 · 벽면 흡착 후</span>
+          <h3>픽셀 단위 균열 경로 추출</h3>
+          <dl class="kv"><dt>모델</dt><dd>SegFormer-B0</dd><dt>입력</dt><dd>50% 중첩 타일 108장</dd><dt>정합</dt><dd>count-map 가중평균</dd><dt>추론</dt><dd class="num">3.148 s (end-to-end)</dd></dl>
+        </div>
+      </div>
+      <div class="timing" role="img" aria-label="Jetson 실측 처리시간: 2단계 초기 5.227초, 배치 적용 3.148초, 1단계 0.456초">
+        <div class="row"><span>2단계 초기</span><div class="track"><div class="fill" style="width:100%"></div></div><span>5.227 s</span></div>
+        <div class="row"><span>2단계 배치</span><div class="track"><div class="fill y" style="width:60.2%"></div></div><span>3.148 s</span></div>
+        <div class="row"><span>1단계 탐색</span><div class="track"><div class="fill y" style="width:8.7%"></div></div><span>0.456 s</span></div>
+      </div>
+      <p class="src">Jetson 실기, 원본 1장 기준. 배치 추론으로 2단계 처리시간을 39.8% 단축했고, 두 단계 간 약 6.9배 차이를 실측해 2단계 구조의 근거로 삼았습니다.</p>
+      <div class="metrics">
+        <div><div class="v">0.6445</div><div class="k">IoU (0.6368에서 개선)</div></div>
+        <div><div class="v">0.7780</div><div class="k">Precision</div></div>
+        <div><div class="v">0.8311</div><div class="k">Recall</div></div>
+        <div><div class="v">−11.3%</div><div class="k">파라미터 (L1 프루닝, IoU 손실 0.26%p)</div></div>
+      </div>
+      <p class="src">후보 7종(YOLO11n-seg, YOLOv8n-seg, U-Net, DeepLabV3+, Fast-SCNN, DeepCrack, SegFormer-B0)을 같은 조건에서 학습하고 TensorRT FP16으로 변환해 Jetson에서 비교, IoU가 가장 높은 SegFormer-B0을 채택했습니다.</p>
+      <div class="dataset">
+        <img src="img/dataset.webp" alt="균열 원본 학습 이미지 타일">
+        <img src="img/masks.webp" alt="균열 라벨 마스크 타일">
+      </div>
+      <div class="dcap"><b>총 11,298장 원본 학습데이터</b> <span class="desc">(데이터증강 전)</span><p class="num">Train 9,038장 · Val 1,130장 · Test 1,130장 (8:1:1)</p></div>
+      <figure class="pipe" style="margin-inline:auto;margin-bottom:0"><img src="img/pipeline.webp" alt="원본 균열 이미지에서 이진 마스크, 정제 마스크, 골격선, 스플라인 보수 경로로 이어지는 처리 단계"><figcaption>원본 → 이진 마스크 → 최대 성분 정제 → 골격선 → 스플라인 보수 경로</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="energy">
+    <div class="band"><div class="wrap"><b>Solution</b>드론의 한계 극복</div></div>
+    <div class="wrap">
+      <div class="head">
+        <h2 class="title">벽에 붙어 있는 동안은 프로펠러를 멈춥니다</h2>
+        <p class="lede">흡착 상태에서는 추력 모터를 정지하고 NEMA 17 스텝모터 3개로만 로봇암을 구동합니다. 벽면에 고정되어 바람 같은 외란에도 정밀하게 보수할 수 있습니다.</p>
+      </div>
+      <div class="energy">
+        <div>
+          <h3>소비전력</h3>
+          <div class="hb"><span>호버링</span><div class="track"><div class="fill" style="width:100%">191.5 W</div></div></div>
+          <div class="hb"><span>흡착 보수</span><div class="track"><div class="fill y" style="width:47.5%">91 W</div></div></div>
+          <p class="desc">흡착 중 소비전력 약 52% 감소</p>
+        </div>
+        <div>
+          <h3>배터리 1개당 작업시간 <span class="desc" style="font-size:.85rem">6S 5,200 mAh</span></h3>
+          <div class="hb"><span>호버링만</span><div class="track"><div class="fill" style="width:74.4%">약 29분</div></div></div>
+          <div class="hb"><span>절반 흡착</span><div class="track"><div class="fill y" style="width:100%">약 39분</div></div></div>
+          <p class="desc">전체 작업시간의 절반을 흡착 보수에 쓴다고 가정할 때 약 36% 증가</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="prototype">
+    <div class="band"><div class="wrap"><b>Solution</b>개발 현황</div></div>
+    <div class="wrap">
+      <div class="head"><h2 class="title">실물로 만들고 있습니다</h2></div>
+      <div class="proto">
+        <figure><div class="im"><img src="img/flight.webp" alt="야간에 건물 앞에서 비행 시험 중인 드론"></div><figcaption>자율비행 시험<p>센서 융합 기반 자율비행 기체</p></figcaption></figure>
+        <figure><div class="im"><img src="img/drone.webp" alt="작업대 위의 드론 기체" style="object-position:50% 40%"></div><figcaption>기체 제작<p>프레임과 탑재 전장</p></figcaption></figure>
+        <figure><div class="im"><img src="img/pads.webp" alt="콘크리트 기둥에 붙은 진공 흡착패드 8개와 공압 호스" style="object-position:50% 35%"></div><figcaption>흡착부 시험<p>패드 8개 · 독립 유로 2개</p></figcaption></figure>
+        <figure><div class="im"><img src="img/arm.webp" alt="스텝모터로 구동하는 3D 프린팅 로봇암"></div><figcaption>보수 로봇암<p>NEMA 17 스텝모터 구동</p></figcaption></figure>
+      </div>
+      <div class="status">
+        <span class="chip">자율비행 드론 제작 완료</span>
+        <span class="chip">흡착부 제작 완료 · 요구 흡착력 충족</span>
+        <span class="chip">로봇암 제작 완료</span>
+        <span class="chip on">계통 통합 진행 중</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="market">
+    <div class="band"><div class="wrap"><b>Market Size &amp; Opportunity</b>공략할 시장규모 및 가능성</div></div>
+    <div class="wrap">
+      <div class="head"><h2 class="title">약 4,900개 업체<br>6,400억 원의 기회</h2></div>
+      <div class="mkt">
+        <div>
+          <div class="tiers">
+            <div class="tier"><b>TAM</b><div><h3>전 세계 방수공사업</h3><p class="desc">글로벌 방수·외벽 보수 서비스 시장</p></div></div>
+            <div class="tier"><b>SAM</b><div><h3>국내 방수공사 전문건설업</h3><p class="num">등록업체 12,198개, 연간 인건비 총액 약 1.6조 원</p></div></div>
+            <div class="tier"><b>SOM</b><div><h3>5인 이상 규모의 방수공사 전문건설업</h3><p class="num">등록업체 약 4,900개, 연간 인건비 총액 약 6,400억 원</p></div></div>
+          </div>
+          <p class="src">출처: 대한건설정책연구원(RICON), 전문건설공제조합 보증실적 기반 수주동향(2024.02) · Navigating Exterior Wall Renovation Services Market Growth, MRA(2026)</p>
+        </div>
+        <div class="rings">
+          <svg viewBox="0 0 440 420" role="img" aria-label="TAM, SAM, SOM 동심원">
+            <circle cx="220" cy="210" r="200" fill="var(--paler)"/>
+            <circle cx="262" cy="210" r="150" fill="var(--pale)"/>
+            <circle cx="310" cy="210" r="100" fill="var(--yellow)" opacity=".85"/>
+            <text x="78" y="214" text-anchor="middle" font-size="24">TAM</text><text x="78" y="236" text-anchor="middle" font-size="12" fill="var(--grey)">전체 시장</text>
+            <text x="166" y="214" text-anchor="middle" font-size="24">SAM</text><text x="166" y="236" text-anchor="middle" font-size="12" fill="var(--grey)">유효 시장</text>
+            <text x="310" y="214" text-anchor="middle" font-size="24">SOM</text><text x="310" y="236" text-anchor="middle" font-size="12" fill="#6B5D16">수익 시장</text>
+          </svg>
+        </div>
+      </div>
+      <div class="growth">
+        <figure>
+          <svg viewBox="0 0 120 120" role="img" aria-label="노후건축물 중 수명초과 44.4%">
+            <circle cx="60" cy="60" r="46" fill="none" stroke="var(--pale)" stroke-width="16"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="var(--yellow)" stroke-width="16" stroke-linecap="round" pathLength="100" stroke-dasharray="44.4 100" transform="rotate(-90 60 60)"/>
+            <text x="60" y="60" text-anchor="middle" font-size="18" font-weight="700" fill="var(--ink)">44.4%</text>
+            <text x="60" y="74" text-anchor="middle" font-size="7.5" fill="var(--ink)">노후건축물 중</text>
+            <text x="60" y="84" text-anchor="middle" font-size="7.5" fill="var(--ink)">수명초과 비율</text>
+          </svg>
+          <figcaption><b>노후건축물 44.4%가 30년 수명초과 (국토부 2024)</b><p>노후화로 인한 외벽 보수 필요성 증가</p></figcaption>
+        </figure>
+        <figure>
+          <svg viewBox="0 0 160 170" role="img" aria-label="방수공사업 시장성장률 연 5~6%">
+            <path d="M80 4 L150 66 L112 66 L112 120 Q112 160 64 164 Q92 148 92 118 L92 66 L10 66 Z" fill="var(--pale)"/>
+            <text x="86" y="92" text-anchor="middle" font-size="13" fill="var(--ink)">시장성장률</text>
+            <text x="86" y="112" text-anchor="middle" font-size="15" fill="var(--ink)">연 5~6%</text>
+          </svg>
+          <figcaption><b>방수공사업 기준 5년간 성장률: 연 5~6%</b><p>타겟 시장의 성장 가능성</p></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="bm">
+    <div class="band"><div class="wrap"><b>Business Model</b>우리의 수익 모델</div></div>
+    <div class="wrap">
+      <div class="head"><h2 class="title">다각화된 수익 구조</h2></div>
+      <div class="bm">
+        <div><span class="label">수익모델 1</span><h3>균열 탐지 드론 서비스</h3><p class="desc">CRAD 드론이 완성되기 전 탐지 서비스만으로 이윤을 창출합니다.</p></div>
+        <div><span class="label">수익모델 2</span><h3>CRAD 드론 탐지, 보수 서비스</h3><p class="desc">CRAD 드론이 필요한 건설사에 용역 서비스를 제공합니다.</p></div>
+        <div><span class="label">수익모델 3</span><h3>CRAD 드론 판매</h3><p class="desc">CRAD 드론의 수요가 많은 건설사에 직접 판매합니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="compete">
+    <div class="band"><div class="wrap"><b>Competitive Landscape</b>경쟁 현황 및 우리의 위치</div></div>
+    <div class="wrap">
+      <div class="head"><h2 class="title">경쟁사 대비 명확한 차별점</h2></div>
+      <div class="comp">
+        <ol class="adv">
+          <li><span>장점<i>1</i></span><div>타사 대비 저렴한 서비스 비용</div></li>
+          <li><span>장점<i>2</i></span><div>기존 작업자 방식보다 낮은 미탐지 확률 및 경쟁사와 동등한 성능</div></li>
+          <li><span>장점<i>3</i></span><div>탐지와 보수를 올인원으로 진행, 공사기간 감축 효과</div></li>
+        </ol>
+        <div class="pos">
+          <svg viewBox="0 0 470 430" role="img" aria-label="비용과 미탐지 확률 기준 포지셔닝. Crack은 저비용, 낮은 미탐지 확률 영역">
+            <line x1="235" y1="34" x2="235" y2="396" stroke="#BDBDBD"/>
+            <line x1="20" y1="215" x2="450" y2="215" stroke="#BDBDBD"/>
+            <text x="235" y="22" text-anchor="middle" font-size="12" fill="var(--grey)">저비용</text>
+            <text x="235" y="418" text-anchor="middle" font-size="12" fill="var(--grey)">고비용</text>
+            <text x="22" y="238" font-size="12" fill="var(--grey)">높은 미탐지 확률</text>
+            <text x="448" y="238" text-anchor="end" font-size="12" fill="var(--grey)">낮은 미탐지 확률</text>
+            <circle cx="166" cy="98" r="32" fill="var(--paler)"/><text x="166" y="103" text-anchor="middle" font-size="13" font-weight="500">A사</text>
+            <circle cx="334" cy="310" r="32" fill="var(--paler)"/><text x="334" y="315" text-anchor="middle" font-size="13" font-weight="500">B사</text>
+            <circle cx="130" cy="330" r="44" fill="var(--paler)"/><text x="130" y="326" text-anchor="middle" font-size="12.5" font-weight="500">기존 인력</text><text x="130" y="343" text-anchor="middle" font-size="12.5" font-weight="500">기반 작업</text>
+            <circle cx="350" cy="104" r="62" fill="var(--yellow)"/><text x="350" y="112" text-anchor="middle" font-size="22" font-weight="700">Crack</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="band"><div class="wrap"><b>Team</b>팀 소개</div></div>
+    <div class="wrap">
+      <div class="head"><h2 class="title">산업과 고객을 가장 잘 이해하는 전문가들</h2></div>
+      <div class="team">
+        <div class="member">
+          <div class="ph"><img src="img/t_jang.webp" alt="장원준" width="300" height="300"></div>
+          <div><span class="role">PM</span><h3>장원준</h3><p class="school">국립공주대학교</p>
+            <ul><li>2023 한국자동차공학회 대학생 자작자동차경진대회 금상</li><li>교내 창의융합경진대회 우수상</li><li>KNU 학습공동체 우수팀</li><li>2026 대한기계학회 설계경진대회 본선 진출</li></ul></div>
+        </div>
+        <div class="member">
+          <div class="ph"><img src="img/t_yoo.webp" alt="유현우" width="300" height="300"></div>
+          <div><span class="role">ENGINEER</span><h3>유현우</h3><p class="school">국립공주대학교</p>
+            <ul><li>교내 창의융합경진대회 우수상</li><li>KNU 학습공동체 우수팀</li><li>2026 대한기계학회 설계경진대회 본선 진출</li></ul></div>
+        </div>
+        <div class="member">
+          <div class="ph"><img src="img/t_lim.webp" alt="임상준" width="300" height="300"></div>
+          <div><span class="role">ENGINEER</span><h3>임상준</h3><p class="school">국립공주대학교</p>
+            <ul><li>교내 창의융합경진대회 우수상</li><li>KNU 학습공동체 우수팀</li><li>2026 대한기계학회 설계경진대회 본선 진출</li></ul></div>
+        </div>
+      </div>
+      <p class="advisor">국립공주대학교 기계자동차공학부 기계공학전공 · 지도교수 김성관 교수</p>
+    </div>
+  </section>
+
+  <section id="contact" class="vision">
+    <div class="band"><div class="wrap"><b>Vision</b>Crack의 비전</div></div>
+    <div class="wrap">
+      <h2><span>외벽보수공사 추락사고를 방지하는</span><br><span>가장 경제적인 해법.</span></h2>
+      <div class="contact">
+        <div><p class="k">도입 · 협업 · 투자 문의 (PM 장원준)</p><p class="mail" id="mail">wonjun302@naver.com</p></div>
+        <button class="btn" id="copyBtn" type="button">이메일 복사</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>© 2026 Team Crack · 국립공주대학교</span><span>CRAD — Crack Repair AI Drone</span></div></footer>
+
+<script>
+(function(){
+  var b=document.getElementById('copyBtn'), m=document.getElementById('mail');
+  function done(t){b.textContent=t;setTimeout(function(){b.textContent='이메일 복사'},1800)}
+  function sel(){var r=document.createRange();r.selectNodeContents(m);var s=getSelection();s.removeAllRanges();s.addRange(r);done('선택됨 · 복사하세요')}
+  b.addEventListener('click',function(){
+    try{navigator.clipboard.writeText(m.textContent.trim()).then(function(){done('복사됨')},sel)}catch(e){sel()}
+  });
+})();
+</script>
+</body>
+</html>

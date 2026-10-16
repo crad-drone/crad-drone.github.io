@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://crad-drone.github.io/sitemap.xml
